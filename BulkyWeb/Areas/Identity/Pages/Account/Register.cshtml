@@ -58,7 +58,14 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select"></select>
+                <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
+                    <option disaled selected>--Select--</option>
+                </select>
+            </div>
+            <div class="form-floating mb-3">
+                <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select d-none">
+                    <option disaled selected>--Select--</option>
+                </select>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
@@ -97,4 +104,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+	<script src="~/js/register.js"></script>
 }
