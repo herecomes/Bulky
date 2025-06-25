@@ -8,6 +8,7 @@ namespace Bulky.DataAccess.Repository.IRepository
 {
     public interface IUnitOfWork
     {
+        IShoppingCartRepository ShoppingCart { get; }
         ICategoryRepository Category { get; }
         IProductRepository Product { get; }
         ICompanyRepository Company { get; }
