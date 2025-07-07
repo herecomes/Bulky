@@ -30,7 +30,7 @@ namespace Bulky.DataAccess.Repository
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             //Category? categoryFromDb3 = _db.Categories.Where(u=>u.Id == id).FirstOrDefault(); basically the same as below
-            IQueryable<T> query =  dbSet;
+            IQueryable<T> query =  dbSet.AsNoTracking();
             query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperties))
             {
