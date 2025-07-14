@@ -1,4 +1,5 @@
 ﻿using Bulky.DataAccess.Repository.IRepository;
+using Bulky.Models;
 using Bulky.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace BulkyWeb.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class ShoppingCartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +17,6 @@ namespace BulkyWeb.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [Area("Customer")]
         [Authorize]
         public IActionResult Index()
         {
@@ -28,7 +29,66 @@ namespace BulkyWeb.Areas.Customer.Controllers
                 OrderTotal = 0.0
             };
 
+            foreach(var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                cart.Price = GetPriceBasedOnCount(cart);
+                ShoppingCartVM.OrderTotal += cart.Price * cart.Count;
+            }
+
             return View(ShoppingCartVM);
+        }
+
+        
+        public IActionResult Plus(int cartId)
+        {
+            var cart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            cart.Count += 1;
+            _unitOfWork.ShoppingCart.Update(cart);
+            _unitOfWork.Save();
+            TempData["success"] = "Shopping cart updated successfully!";
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Minus(int cartId)
+        {
+            var cart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            if(cart.Count == 1)
+            {
+                _unitOfWork.ShoppingCart.Remove(cart);
+                _unitOfWork.Save();
+                TempData["success"] = "Shopping cart updated successfully!";
+            }
+            else
+            {
+                cart.Count -= 1;
+                _unitOfWork.ShoppingCart.Update(cart);
+                _unitOfWork.Save();
+                TempData["success"] = "Shopping cart updated successfully!";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Remove(int cartId)
+        {
+            var cart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            _unitOfWork.ShoppingCart.Remove(cart);
+            _unitOfWork.Save();
+            TempData["success"] = "Shopping cart updated successfully!";
+            return RedirectToAction(nameof(Index));
+        }
+
+        private double GetPriceBasedOnCount(ShoppingCart cart)
+        {
+            if(cart.Count <= 50)
+            {
+                return cart.Product.Price;
+            }
+            else if(cart.Count <=100 && cart.Count > 50)
+            {
+                return cart.Product.Price50;
+            }
+            else
+            {
+                return cart.Product.Price100;
+            }
         }
     }
 }
