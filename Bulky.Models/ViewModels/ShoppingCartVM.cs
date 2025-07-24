@@ -9,6 +9,6 @@ namespace Bulky.Models.ViewModels
     public class ShoppingCartVM
     {
         public IEnumerable<ShoppingCart> ShoppingCartList { get; set; } = new List<ShoppingCart>();
-        public double OrderTotal { get; set; } = 0.0;
+        public OrderHeader OrderHeader { get; set; } = new OrderHeader();
     }
 }
