@@ -1,0 +1,77 @@
+﻿@{
+	var status = Context.Request.Query["status"];
+
+	var inprocess = "";
+	var pending = "";
+	var completed = "";
+	var approved = "";
+	var all = "";
+
+	switch (status){
+		case "inprocess":
+			inprocess = "active text-bg-success";
+			break;
+		case "pending":
+			pending = "active text-bg-success";
+			break;
+		case "completed":
+			completed = "active text-bg-success";
+			break;
+		case "approved":
+			approved = "active text-bg-success";
+			break;
+
+		default:
+			all = "active text-bg-success";
+			break;
+	}
+}
+
+<div class="container">
+	<div class="row pt-4">
+		<div class="col-6 pb-3">
+			<h2 class="text-primary">
+				Order List
+			</h2>
+		</div>
+		</div>
+	</div>
+</div>
+<div class="d-flex">
+	<span></span>
+	<ul>
+		<li class="@inprocess"><a asp-controller="Order" asp-action="Index" asp-route-status="inprocess">inprocess</a></li>
+		<li class="@pending"><a asp-controller="Order" asp-action="Index" asp-route-status="pending">pending</a></li>
+		<li class="@completed"><a asp-controller="Order" asp-action="Index" asp-route-status="completed">completed</a></li>
+		<li class="@approved"><a asp-controller="Order" asp-action="Index" asp-route-status="approved">approved</a></li>
+		<li class="@all"><a asp-controller="Order" asp-action="Index" asp-route-status="all">all</a></li>
+	</u>
+</div>
+<table id="tblData" class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>
+				ID
+			</th>
+			<th>
+				Name
+			</th>
+			<th>
+				Phone Number
+			</th>
+			<th>
+				Email
+			</th>
+			<th>
+				OrderStatus
+			</th>
+			<th>
+				Order Total
+			</th>
+		</tr>
+	</thead>
+</table>
+
+@section Scripts {
+	<script src="~/js/order.js"></script>
+}
