@@ -262,9 +262,9 @@
                                 {
                                     <button type="submit" onclick="return validateInput()" asp-action="ShipOrder" class="btn btn-primary form-control my-1">Ship Order</button>
                                 }
-                                @if (Model.OrderHeader.OrderStatus != SD.StatusRefunded && Model.OrderHeader.OrderStatus != SD.StatusCancelled && Model.OrderHeader.OrderStatus != SD.StatusCancelled)
+                                @if (Model.OrderHeader.OrderStatus != SD.StatusRefunded && Model.OrderHeader.OrderStatus != SD.StatusCancelled && Model.OrderHeader.OrderStatus != SD.StatusShipped)
                                 {
-                                    <button type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                                    <button asp-action="CancelOrder" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
                                 }
 							}
                         </div>
