@@ -1,5 +1,6 @@
 using Bulky.DataAccess.Repository.IRepository;
 using Bulky.Models;
+using Bulky.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -50,14 +51,16 @@ namespace BulkyWeb.Areas.Customer.Controllers
             {
                 existingCart.Count += shoppingCart.Count;
                 _unitOfWork.ShoppingCart.Update(existingCart);
+                _unitOfWork.Save();
                 TempData["success"] = "Shopping cart updated successfully!";
             }
             else
             {
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
                 TempData["success"] = "Shopping cart added successfully!";
             }
-            _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
         }
